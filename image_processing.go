@@ -59,9 +59,9 @@ func (b *Bot) DetectImage(in *image.Image, tmpl *image.Image) (float32, float32,
 	inMat.Close()
 	tmplMat.Close()
 	mask.Close()
-	result.Close()
-
 	mnv, mxv, mnl, mxl := gocv.MinMaxLoc(result)
+
+	result.Close()
 	return mnv, mxv, &mnl, &mxl, nil
 }
 
