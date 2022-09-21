@@ -47,18 +47,19 @@ func (b *Bot) DetectImage(in *image.Image, tmpl *image.Image) (float32, float32,
 	if err != nil {
 		return 0, 0, nil, nil, fmt.Errorf("failed to convert img to gocv.Mat: %v", err)
 	}
-	defer inMat.Close()
 	tmplMat, err := gocv.ImageToMatRGB(*tmpl)
 	if err != nil {
 		return 0, 0, nil, nil, fmt.Errorf("failed to convert img to gocv.Mat: %v", err)
 	}
-	defer tmplMat.Close()
 
 	result, mask := gocv.NewMat(), gocv.NewMat()
-	defer mask.Close()
-	defer result.Close()
 
 	gocv.MatchTemplate(inMat, tmplMat, &result, b.config.cvMatchMode, mask)
+
+	inMat.Close()
+	tmplMat.Close()
+	mask.Close()
+	result.Close()
 
 	mnv, mxv, mnl, mxl := gocv.MinMaxLoc(result)
 	return mnv, mxv, &mnl, &mxl, nil
